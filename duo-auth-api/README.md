@@ -14,11 +14,11 @@ Postman environments can be used to allow a user to change the properties/header
 
 Adding an environment:
 
-In Postman, the Environment dropdown lives in the upper right. By default, no environments are configured. To add an environment, click the Eye icon, then click Add:
+1. In Postman, the Environment dropdown lives in the upper right. By default, no environments are configured. To add an environment, click the Eye icon, then click Add:
 
 
 
-
+![alt text](image.png)
 
 
 
@@ -41,21 +41,21 @@ In Postman, the Environment dropdown lives in the upper right. By default, no en
 
 
 
-
+![alt text](image-1.png)
 
 
 Import Postman Environment Template
 
 First, the Duo Auth API Postman Environment template needs to be imported into the Postman application.
-Open the Postman application, if it is not open already.
-In the left panel, select the Environments tile. If there is no Environments tile displayed, select the  tile at the bottom of the left panel and then make sure the toggle slider is enabled for the Environments sidebar item.
+1. Open the Postman application, if it is not open already.
+2. In the left panel, select the Environments tile. If there is no Environments tile displayed, select the ![alt text](image-2.png) tile at the bottom of the left panel and then make sure the toggle slider is enabled for the Environments sidebar item.
 
 
 
 
 
 
-
+![alt text](image-3.png)
 
 
 
@@ -75,13 +75,13 @@ apihost
 Import Postman Collections Template
 
 Second, the Duo Auth API Postman Collections template needs to be imported into the Postman application.
-Open the Postman application, if it is not open already.
-In the left panel, select the Collections tile. If there is no Collections tile displayed, select the tile at the bottom of the left panel and then make sure the toggle slider is enabled for the Collections sidebar item.
+1. Open the Postman application, if it is not open already.
+2. In the left panel, select the Collections tile. If there is no Collections tile displayed, select the ![ ](image-4.png)tile at the bottom of the left panel and then make sure the toggle slider is enabled for the Collections sidebar item.
 
 
 
 
-
+![alt text](image-5.png)
 
 
 
@@ -100,7 +100,7 @@ In the left panel, select the Collections tile. If there is no Collections t
 
 
 
-
+![alt text](image-6.png)
 
 
 
