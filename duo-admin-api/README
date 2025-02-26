@@ -16,7 +16,7 @@ Adding an environment:
 
 1. In Postman, the Environment dropdown lives in the upper right. By default, no environments are configured. To add an environment, click the Eye icon, then click Add:
 
-![alt text](image.png)
+[<img src="image.png">](image.png)
 
 
 
