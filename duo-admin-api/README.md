@@ -1,5 +1,5 @@
 # duo-admin-api
-Duo Admin API
+## Duo Admin API
 
 The Duo Admin API provides programmatic access to the administrative functionality of Duo Security's two-factor authentication platform.
 
@@ -7,12 +7,12 @@ The Admin API lets developers integrate with Duo Security's platform at a low le
 Developers can write applications that programmatically read their Duo account's authentication logs, administrator logs, and telephony logs; read or update account settings; and retrieve reports and other information.
 Review the API Details to see how to construct your first API request.
 
-Postman Configuration using Pre-built Templates
+## Postman Configuration using Pre-built Templates
 
 Setting Up Multiple Environments
 Postman environments can be used to allow a user to change the properties/headers of a request on the fly. Since the Duo requests must have the authentication headers regenerated upon each new request, this works REALLY well with environments. Below is an example of how to set this up.
 
-Adding an environment:
+## Adding an environment:
 
 1. In Postman, the Environment dropdown lives in the upper right. By default, no environments are configured. To add an environment, click the Eye icon, then click Add:
 
@@ -43,7 +43,7 @@ Adding an environment:
 ![alt text](image-1.png)
 
 
-Import Postman Environment Template
+## Import Postman Environment Template
 
 First, the Duo Admin API Postman Environment template needs to be imported into the Postman application.
 1. Open the Postman application, if it is not open already.
@@ -71,7 +71,7 @@ skey
 apihost
 
 
-Import Postman Collections Template
+## Import Postman Collections Template
 
 Second, the Duo Admin API Postman Collections template needs to be imported into the Postman application.
 1. Open the Postman application, if it is not open already.
@@ -115,8 +115,8 @@ Second, the Duo Admin API Postman Collections template needs to be imported into
 7. Expand the Duo Admin API Collection item to reveal two example requests.
 
 
-Using the Templates
+## Using the Templates
 Once the templates have been imported, they require the standard three pieces of information from a Duo Admin API application integration.
 
-Adding the Duo API credentials
+## Adding the Duo API credentials
 Navigate to the Duo Admin API environment within Postman and update the Current value rows for each of the ikey, skey, and apihost with information from the Duo Admin API integration from the account will be tested. Click the save button in the upper right if the values should be stored for future use after the Postman application has been closed.
