@@ -1,109 +1,114 @@
 # duo_postman_api_collections
-**Overview**
 
+## Overview
 This repository contains Postman collections and environment configurations to interact with the Duo Admin API for managing users, groups, authentication logs, applications, and more.
 
 The collection is designed to help security administrators and developers test and automate administrative tasks within Duo Security.
 
+---
 
-**Prerequisites**
+## Prerequisites
 
 Before using this collection, ensure you have:
 
-Duo Admin panel Access:
+1. **Duo Admin Panel Access**:
+   - You need API credentials (Integration Key, Secret Key, and API Hostname).
+   - Enable **[Admin API](https://duo.com/docs/adminapi)**/**[Auth API](https://duo.com/docs/authapi)**/**[OIDC API](https://duo.com/docs/oauthapi)**/**[UNIX](https://duo.com/docs/loginduo)** in the [Duo Admin Panel](https://admin.duosecurity.com).
+   - The API requires **Duo MFA** with an Admin role enabled.
 
-You need API credentials (Integration Key, Secret Key, and API Hostname) for the [Admin API](https://duo.com/docs/adminapi), [Auth API](https://duo.com/docs/authapi), [OIDC API](https://duo.com/docs/oauthapi), and [UNIX](https://duo.com/docs/loginduo).
+2. **Postman Installed**:
+   - Download [Postman](https://www.postman.com/downloads/).
 
-Enable Admin API in the Duo Admin Panel.
+---
 
-The API requires Duo MFA with an Admin role enabled.
+## Setup & Installation
 
-Postman Installed:
+### 1. Clone Repository
+```bash
+git clone https://github.com/shhv/duo_postman_api_collections.git
+cd duo_postman_api_collections
+```
 
-Download Postman.
+### 2. Import Postman Collection & Environment
+- Open **Postman** → Click **Import** → Select the collection JSON file (E.g : `Duo-Admin-API-Collection.json`).
+- Import the environment JSON (E.g : `Duo-Environment.json`).
 
-Newman Installed (for CLI execution, optional):
-
-bash
-Copy
-Edit
-npm install -g newman
-Setup & Installation
-1. Clone Repository
-bash
-Copy
-Edit
-git clone https://github.com/your-repo-name.git
-cd your-repo-name
-2. Import Postman Collection & Environment
-Open Postman → Click Import → Select the collection JSON file (Duo-Admin-API-Collection.json).
-
-Import the environment JSON (Duo-Environment.json).
-
-3. Configure Environment Variables
+### 3. Configure Environment Variables
 Set the following environment variables in Postman:
 
-Variable Name	Description	Example
-DUO_API_HOSTNAME	Your Duo API hostname	api-xxxx.duosecurity.com
-DUO_INTEGRATION_KEY	Your Integration Key	DIXXXXXXXXXXXXXXXXXX
-DUO_SECRET_KEY	Your Secret Key (store securely)	xxxxxxxxxxxxxxxxxxxx
-Authentication & Security
-API Authentication
-Duo Admin API uses HMAC-SHA1 request signing. Each request must include a properly formatted Authorization Header.
+| Variable Name        | Description                  | Example |
+|----------------------|------------------------------|---------|
+| `DUO_API_HOSTNAME`   | Your Duo API hostname       | `api-xxxx.duosecurity.com` |
+| `DUO_INTEGRATION_KEY`| Your Integration Key        | `DIXXXXXXXXXXXXXXXXXX` |
+| `DUO_SECRET_KEY`     | Your Secret Key (store securely) | `xxxxxxxxxxxxxxxxxxxx` |
+
+---
+
+## Authentication & Security
+
+### API Authentication
+Duo API uses **HMAC-SHA1** request signing. Each request must include a properly formatted **Authorization Header**.
 
 Postman pre-request scripts handle this automatically by generating:
+- The **Date** header.
+- The **Signature** using your Secret Key.
 
-The Date header.
 
-The Signature using your Secret Key.
+### Important Security Notes
+- **Never share or expose your Secret Key** in a public repository.
+- Use **Postman’s variable encryption** or store secrets securely.
+- If credentials are compromised, **revoke & regenerate** in Duo Admin Panel.
 
-For manual API requests, refer to Duo Admin API Authentication.
+---
 
-Important Security Notes
-Never share or expose your Secret Key in a public repository.
+## How to Use
 
-Use Postman’s variable encryption or store secrets securely.
+### Using Postman UI
+1. Select the **Duo-xxx-API-Postman_Collection** in Postman.
+2. Choose an **API request** (e.g., `Get Users`, `Get Logs`).
+3. Ensure your **environment is set** with API credentials.
+4. Click **Send** and view the response.
 
-If credentials are compromised, revoke & regenerate in Duo Admin Panel.
+---
 
-How to Use
-Using Postman UI
-Select the Duo-Admin-API-Collection in Postman.
+## Collection Structure
 
-Choose an API request (e.g., Get Users, Get Logs).
-
-Ensure your environment is set with API credentials.
-
-Click Send and view the response.
-
-Using Newman CLI (Optional)
-To run all requests via command line:
-
-bash
-Copy
-Edit
-newman run Duo-Admin-API-Collection.json -e Duo-Environment.json
-To generate an HTML report:
-
-bash
-Copy
-Edit
-newman run Duo-Admin-API-Collection.json -e Duo-Environment.json -r html
-Collection Structure
-pgsql
-Copy
-Edit
-/duo-admin-api-postman
-│── collections/
-│   ├── Duo-Admin-API-Collection.json
-│── environments/
-│   ├── Duo-Environment.json
-│── scripts/
-│   ├── auth-signature.js
+```
+/duo-xxx-api
+├── Duo-xxx-API-postman_collection.json
+├── Duo-xxx-postman_environment.json
 │── README.md
-collections/ → Contains the Postman collection for Duo Admin API.
+```
 
-environments/ → Stores the environment JSON file with API credentials.
+- **collections/** → Contains the Postman collection for Duo Admin API.
+- **environments/** → Stores the environment JSON file with API credentials.
+- **scripts/** → Custom scripts for authentication and request signing.
 
-scripts/ → Custom scripts for authentication and request signing.
+---
 
+## Troubleshooting
+
+**Common Issues & Fixes**
+
+| Issue                 | Cause                          | Solution |
+|----------------------|------------------------------|---------|
+| `401 Unauthorized`  | Incorrect API key            | Verify `DUO_INTEGRATION_KEY` & `DUO_SECRET_KEY` |
+| `403 Forbidden`     | Insufficient permissions     | Ensure Admin API is enabled in Duo Dashboard |
+| `500 Internal Server Error` | Incorrect request format | Double-check API request body & parameters |
+
+For more troubleshooting, check 
+* [Duo Admin API Documentation](https://duo.com/docs/adminapi).
+* [Duo Auth API Documentation](https://duo.com/docs/authapi)
+* [Duo OIDC API Documentation](https://duo.com/docs/oauthapi)
+* [Duo Unix Documentation](https://duo.com/docs/loginduo)
+
+---
+
+## Contributing
+- If you find issues or have suggestions, feel free to open a pull request.
+- Follow [Duo's API guidelines](https://duo.com/docs/adminapi#api-guidelines).
+
+---
+
+## License
+This project is open-source and follows the **GNU General Public License v3.0**.
