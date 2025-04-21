@@ -40,7 +40,7 @@ Postman environments can be used to allow a user to change the properties/header
 2. Add your specific ikey, skey, apihost as Variables and add your Accounts API integration keys in as the current values. 
 
 
-![alt text](image-1.png)
+![alt text](Account-api-env.png)
 
 
 ## Import Postman Environment Template
@@ -53,7 +53,7 @@ First, the Duo Account API Postman Environment template needs to be imported int
 
 
 
-![alt text](image-3.png)
+![alt text](Accounts-api-1.png)
 
 
 
@@ -82,7 +82,7 @@ Second, the Duo Account API Postman Collections template needs to be imported in
 
 
 
-![alt text](image-5.png)
+![alt text](Accounts-API.png)
 
 
 
@@ -101,7 +101,7 @@ Second, the Duo Account API Postman Collections template needs to be imported in
 
 
 
-![alt text](image-6.png)
+![alt text](accounts-api-scripts.png)
 
 
 
