@@ -354,11 +354,6 @@
 			"type": "string"
 		},
 		{
-			"value": "",
-			"type": "string",
-			"disabled": true
-		},
-		{
 			"key": "oidc_access_token",
 			"value": ""
 		}
