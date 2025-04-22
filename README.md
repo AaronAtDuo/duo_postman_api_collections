@@ -1,9 +1,9 @@
-# duo_postman_api_collections
+# Cisco Duo Postman API Collections
 
 ## Overview
-This repository contains Postman collections and environment configurations to interact with the Duo Admin API for managing users, groups, authentication logs, applications, and more.
+This repository contains [Postman](https://www.postman.com/home) collections and environment configurations to interact with the various Duo APIs for managing users, groups, authentication logs, applications, and more.
 
-The collection is designed to help security administrators and developers test and automate administrative tasks within Duo Security.
+The collections are designed to help security administrators and developers test and automate administrative tasks within Duo Security. In addition, the collections assembled here are an effort to provide examples of how to interact with each of the Duo API endpoints.
 
 ---
 

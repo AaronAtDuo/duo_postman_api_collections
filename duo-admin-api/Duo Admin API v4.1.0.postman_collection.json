@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "b6c5618e-92be-4372-89c2-4bdf04453dc5",
 		"name": "Duo Admin API",
-		"description": "[https://duo.com/docs/adminapi](https://duo.com/docs/adminapi)\n\nThis collection contains a goup of examples for each of the major currently available API endpoints within the Duo Admin API. In some cases (like the bulk action endpoints) example payloads for the POST requests have been provided.",
+		"description": "[https://duo.com/docs/adminapi](https://duo.com/docs/adminapi)\n\nThis collection contains a goup of examples for each of the major currently available API endpoints within the Duo Admin API. In some cases (like the bulk action endpoints) example payloads for the POST requests have been provided.\n\n##### API Authentication\n\n> This Collection includes a `pre-request` script that is responsible for handling the per request requirement to include a dynamically generated HTTP `Authorization` header. \n  \n\n##### Troubleshooting\n\n> The `pre-request` script also includes logging capabilties to help in troubleshooting any request failures. Those logging messages are output to the Postman console. \n  \n\n##### Requirements\n\n> The `pre-request` script relies on the availability of the Duo Auth API application integration details from the Duo Admin Panel. These details are the Integration key (`ikey`), Secret key (`skey`), API hostname (`host`). The values for each of these should be stored in a Postman Environment variables (`ikey`, `skey`, and `apihost` respectively) where this Collection will be executed, or within this Collection variables table.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "12279134"
 	},
@@ -57,9 +57,6 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"const utils = eval(globals.loadUtils);",
-									"utils.writeHeader(\"Create user post request tests\");",
-									"",
 									"pm.test(\"Response status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
@@ -107,6 +104,14 @@
 									"",
 									""
 								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"packages": {},
 								"type": "text/javascript"
 							}
 						}
@@ -203,6 +208,66 @@
 								"v1",
 								"users",
 								"bulk_create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bulk Restore Users from Trash",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id_list\": \"[\\\"DUBU8IH281UYD5SFEN76\\\", \\\"DUK5R85ME9S99RUU5RWC\\\", \\\"DUG18B2EYWR07QJAETLZ\\\"]\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{apihost}}/admin/v1/users/bulk_restore",
+							"protocol": "https",
+							"host": [
+								"{{apihost}}"
+							],
+							"path": [
+								"admin",
+								"v1",
+								"users",
+								"bulk_restore"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Multiple Users to Trash",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id_list\": \"[\\\"DUBU8IH281UYD5SFEN76\\\", \\\"DUK5R85ME9S99RUU5RWC\\\", \\\"DUG18B2EYWR07QJAETLZ\\\"]\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{apihost}}/admin/v1/users/bulk_send_to_trash",
+							"protocol": "https",
+							"host": [
+								"{{apihost}}"
+							],
+							"path": [
+								"admin",
+								"v1",
+								"users",
+								"bulk_send_to_trash"
 							]
 						}
 					},
@@ -729,6 +794,28 @@
 					"response": []
 				},
 				{
+					"name": "Retrieve Desktop Authenticators by User ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{apihost}}/admin/v1/users/{{user_id}}/desktopauthenticators",
+							"protocol": "https",
+							"host": [
+								"{{apihost}}"
+							],
+							"path": [
+								"admin",
+								"v1",
+								"users",
+								"{{user_id}}",
+								"desktopauthenticators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Synchronize User from Directory",
 					"request": {
 						"method": "POST",
@@ -757,9 +844,135 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Send Verification Push",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Validate the response object\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.response).to.exist.and.to.be.an('object');",
+									"});",
+									"",
+									"pm.test(\"Validate 'stat' response is 'OK\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.stat).is.equal('OK');",
+									"    pm.environment.set(\"push_id\", responseData.response.push_id);",
+									"    console.log(\"Push ID: \", responseData.response.push_id);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone_id\": \"DP80Z4GVU82OT8O1BNJF\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{apihost}}/admin/v1/users/{{user_id}}/send_verification_push",
+							"protocol": "https",
+							"host": [
+								"{{apihost}}"
+							],
+							"path": [
+								"admin",
+								"v1",
+								"users",
+								"{{user_id}}",
+								"send_verification_push"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Verification Push Response",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{apihost}}/admin/v1/users/{{user_id}}/verification_push_response?push_id={{push_id}}",
+							"protocol": "https",
+							"host": [
+								"{{apihost}}"
+							],
+							"path": [
+								"admin",
+								"v1",
+								"users",
+								"{{user_id}}",
+								"verification_push_response"
+							],
+							"query": [
+								{
+									"key": "push_id",
+									"value": "{{push_id}}",
+									"description": "The ID of the Verified Push action returned from a Send Verification Push operation."
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "https://duo.com/docs/adminapi#users"
+		},
+		{
+			"name": "Bulk Operations",
+			"item": [
+				{
+					"name": "Bulk User Operations",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"operations\": [\n        {\n            \"method\": \"POST\",\n            \"path\": \"/admin/v1/users\",\n            \"body\": {\n                \"username\": \"New User 1\"\n            }\n        },\n        {\n            \"method\": \"POST\",\n            \"path\": \"/admin/v1/users\",\n            \"body\": {\n                \"username\": \"New User 2\"\n            }\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{apihost}}/admin/v1/bulk",
+							"protocol": "https",
+							"host": [
+								"{{apihost}}"
+							],
+							"path": [
+								"admin",
+								"v1",
+								"bulk"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Groups",
@@ -1278,7 +1491,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"const utils = eval(globals.loadUtils);",
+									"const utils = eval(pm.globals.loadUtils);",
 									"utils.writeHeader(\"Create phone post request tests\");",
 									"",
 									"pm.test(\"Response status code is 200\", function () {",
@@ -1333,7 +1546,7 @@
 							"formdata": [
 								{
 									"key": "number",
-									"value": "+919844059515",
+									"value": "+919844059516",
 									"type": "text"
 								},
 								{
@@ -2039,6 +2252,232 @@
 			"description": "https://duo.com/docs/adminapi#webauthn-credentials"
 		},
 		{
+			"name": "Desktop Authenticators",
+			"item": [
+				{
+					"name": "Shared Device Authentication",
+					"item": [
+						{
+							"name": "Retrieve Shared Device Authentication Configurations",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/admin/v1/desktop_authenticators/shared_device_auth",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"admin",
+										"v1",
+										"desktop_authenticators",
+										"shared_device_auth"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10",
+											"description": "The maximum number of records returned.",
+											"disabled": true
+										},
+										{
+											"key": "offset",
+											"value": "0",
+											"description": "The offset from 0 at which to start record retrieval.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Shared Device Authentication Configuration by Key",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/admin/v1/desktop_authenticators/shared_device_auth/{{shared_device_key}}",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"admin",
+										"v1",
+										"desktop_authenticators",
+										"shared_device_auth",
+										"{{shared_device_key}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Shared Device Authentication Configuration",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"group_id_list\": [\"group_id_1\", \"group_id_2\"],\n    \"trusted_endpoint_integration_id_list\": [\"trusted_endpoint_integration_id_1\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/admin/v1/desktop_authenticators/shared_device_auth",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"admin",
+										"v1",
+										"desktop_authenticators",
+										"shared_device_auth"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Shared Device Authentication Configuration",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"active\": 1,\n    \"group_id_list\": \"[\\\"{{group_id_1}}\\\", \\\"{{group_id_2}}\\\"]\",\n    \"name\": \"{{new_name}}\",\n    \"trusted_endpoint_integration_id_list\": \"[\\\"{{trusted_endpoint_integration_id_1}}\\\"]\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/admin/v1/desktop_authenticators/shared_device_auth/{{shared_device_key}}",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"admin",
+										"v1",
+										"desktop_authenticators",
+										"shared_device_auth",
+										"{{shared_device_key}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Shared Device Authentication Configuration Copy",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/admin/v1/desktop_authenticators/shared_device_auth/{{shared_device_key}}",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"admin",
+										"v1",
+										"desktop_authenticators",
+										"shared_device_auth",
+										"{{shared_device_key}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Retrieve Desktop Authenticators",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{apihost}}/admin/v1/desktop_authenticators",
+							"protocol": "https",
+							"host": [
+								"{{apihost}}"
+							],
+							"path": [
+								"admin",
+								"v1",
+								"desktop_authenticators"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "The maximum number of records returned.",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "The offset from 0 at which to start record retrieval.",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Desktop Authenticator by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{apihost}}/admin/v1/desktop_authenticators/{{dakey}}",
+							"protocol": "https",
+							"host": [
+								"{{apihost}}"
+							],
+							"path": [
+								"admin",
+								"v1",
+								"desktop_authenticators",
+								"{{dakey}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Desktop Authenticator",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://{{apihost}}/admin/v1/desktop_authenticators/{{dakey}}",
+							"protocol": "https",
+							"host": [
+								"{{apihost}}"
+							],
+							"path": [
+								"admin",
+								"v1",
+								"desktop_authenticators",
+								"{{dakey}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Bypass Codes",
 			"item": [
 				{
@@ -2456,6 +2895,93 @@
 					"description": "Creation of generic SSO integrations via the Admin API requires the following two feature flags to be enabled on the account:\n\n**Allow the use of Admin API for SSO integrations**\n\n**Allow the use of CloudSSO Generic SAML Service Provider API**"
 				},
 				{
+					"name": "Create Integration (v3)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the response object\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.response).to.exist.and.to.be.an('object');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate adminapi_admins field is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.response.adminapi_admins).to.be.a('number');",
+									"    pm.expect(responseData.response.adminapi_admins).to.be.at.least(0);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate adminapi_info field is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.response.adminapi_info).to.be.a('number').and.to.be.at.least(0);",
+									"});",
+									"",
+									"",
+									"pm.test(\"The adminapi_integrations field is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.response.adminapi_integrations).to.be.a('number').and.to.be.at.least(0);",
+									"});",
+									"",
+									"pm.test(\"Validate 'stat' response is 'OK\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.stat).is.equal('OK');",
+									"    pm.environment.set(\"integration_key\", responseData.response.integration_key);",
+									"    console.log(\"New integration key: \", responseData.response.integration_key);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Citrix NetScaler OIDC Integration via API (v3)\",\n    \"type\": \"netscaler-web\",\n    \"groups_allowed\": \"DG3ZYRRND38JQ7PCFQOG,DGAXLR0P38G93M9ZIBFH\",\n    \"user_access\": \"PERMITTED_GROUPS\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{apihost}}/admin/v3/integrations",
+							"protocol": "https",
+							"host": [
+								"{{apihost}}"
+							],
+							"path": [
+								"admin",
+								"v3",
+								"integrations"
+							]
+						},
+						"description": "https://duo.com/docs/adminapi#create-integration"
+					},
+					"response": []
+				},
+				{
 					"name": "Retrieve Integrations",
 					"request": {
 						"method": "GET",
@@ -2491,7 +3017,7 @@
 					"response": []
 				},
 				{
-					"name": "Create Integrations",
+					"name": "Create Integrations (legacy)",
 					"event": [
 						{
 							"listen": "test",
@@ -3136,6 +3662,27 @@
 					"description": "This folder contains all of the Duo Admin API calls needed to create a new poliy and then update that policy to restrict authentication factors.\n\nRun this folder to create a new policy, update that policy to change the new user section to deny.\n\nA new \"policy_key\" environment variable is created to store the newly created policy key.\n\nUse the Delete Policy request in the folder above to delete the newly created policy when done."
 				},
 				{
+					"name": "Summarize Policies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{apihost}}/admin/v2/policies/summary",
+							"protocol": "https",
+							"host": [
+								"{{apihost}}"
+							],
+							"path": [
+								"admin",
+								"v2",
+								"policies",
+								"summary"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get all policies",
 					"request": {
 						"method": "GET",
@@ -3171,6 +3718,69 @@
 								"v2",
 								"policies",
 								"{{policy_key}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resulting policy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{apihost}}/admin/v2/policies/calculate?user_id={{user_id}}&integration_key={{integration_key}}",
+							"protocol": "https",
+							"host": [
+								"{{apihost}}"
+							],
+							"path": [
+								"admin",
+								"v2",
+								"policies",
+								"calculate"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "{{user_id}}",
+									"description": "[REQUIRED} The user_id of the user to evaluate, as obtained from the Retrieve Users Admin API endpoint or from the Duo Admin Panel."
+								},
+								{
+									"key": "integration_key",
+									"value": "{{integration_key}}",
+									"description": "[REQUIRED] The integration_key of the application to evaluate, as obtained from the Retrieve Integrations Admin API endpoint or from the Duo Admin Panel.\n\n"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Copy Policy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"policy_key\": \"POLBQD6WR0YTIMMNP3O3\",\n    \"new_policy_names_list\": [\"Policy Copy 1\", \"Policy Copy 2\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{apihost}}/admin/v2/policies/copy",
+							"protocol": "https",
+							"host": [
+								"{{apihost}}"
+							],
+							"path": [
+								"admin",
+								"v2",
+								"policies",
+								"copy"
 							]
 						}
 					},
@@ -3306,60 +3916,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Summarize Policies",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://{{apihost}}/admin/v2/policies/summary",
-							"protocol": "https",
-							"host": [
-								"{{apihost}}"
-							],
-							"path": [
-								"admin",
-								"v2",
-								"policies",
-								"summary"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Resulting policy",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://{{apihost}}/admin/v2/policies/calculate?user_id=DUSRGSPQCHCYDOKWNGDW&integration_key=DIWTPWOMV3V9SYJ8FRUI",
-							"protocol": "https",
-							"host": [
-								"{{apihost}}"
-							],
-							"path": [
-								"admin",
-								"v2",
-								"policies",
-								"calculate"
-							],
-							"query": [
-								{
-									"key": "user_id",
-									"value": "DUSRGSPQCHCYDOKWNGDW",
-									"description": "[REQUIRED} The user_id of the user to evaluate, as obtained from the Retrieve Users Admin API endpoint or from the Duo Admin Panel."
-								},
-								{
-									"key": "integration_key",
-									"value": "DIWTPWOMV3V9SYJ8FRUI",
-									"description": "[REQUIRED] The integration_key of the application to evaluate, as obtained from the Retrieve Integrations Admin API endpoint or from the Duo Admin Panel.\n\n"
-								}
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
@@ -3429,6 +3985,158 @@
 		{
 			"name": "Registered Devices",
 			"item": [
+				{
+					"name": "Blocked",
+					"item": [
+						{
+							"name": "Retrieve Blocked Devices",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/admin/v1/registered_devices/blocked",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"admin",
+										"v1",
+										"registered_devices",
+										"blocked"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve Blocked Devices by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/admin/v1/registered_devices/blocked/{{compkey}}",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"admin",
+										"v1",
+										"registered_devices",
+										"blocked",
+										"{{compkey}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Block Devices",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"registered_device_key_list\": [\"compkey_1\", \"compkey_2\"]}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/admin/v1/registered_devices/blocked",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"admin",
+										"v1",
+										"registered_devices",
+										"blocked"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Block Device by ID",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/admin/v1/registered_devices/blocked/{{compkey}}",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"admin",
+										"v1",
+										"registered_devices",
+										"blocked",
+										"{{compkey}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Unblock Devices",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"registered_device_key_list\": [\"compkey_1\", \"compkey_2\"]}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/admin/v1/registered_devices/blocked",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"admin",
+										"v1",
+										"registered_devices",
+										"blocked"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Unblock Device by ID",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/admin/v1/registered_devices/blocked/{{compkey}}",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"admin",
+										"v1",
+										"registered_devices",
+										"blocked",
+										"{{compkey}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "Retrieve Registered Devices",
 					"request": {
@@ -4585,7 +5293,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{apihost}}/admin/v2/logs/authentication",
+							"raw": "https://{{apihost}}/admin/v2/logs/authentication?limit=1000&mintime={{mintime}}&maxtime={{maxtime}}",
 							"protocol": "https",
 							"host": [
 								"{{apihost}}"
@@ -4599,13 +5307,12 @@
 							"query": [
 								{
 									"key": "limit",
-									"value": "",
-									"description": "Optional",
-									"disabled": true
+									"value": "1000",
+									"description": "Optional"
 								},
 								{
 									"key": "next_offset",
-									"value": null,
+									"value": "",
 									"description": "Optional",
 									"disabled": true
 								},
@@ -4617,79 +5324,77 @@
 								},
 								{
 									"key": "mintime",
-									"value": "1613722194760",
-									"description": "Required",
-									"disabled": true
+									"value": "{{mintime}}",
+									"description": "Required: Defaults to the number of days defined in the \"timestampDaysOffset\" collection variable"
 								},
 								{
 									"key": "maxtime",
-									"value": "1614722194860",
-									"description": "Required",
-									"disabled": true
+									"value": "{{maxtime}}",
+									"description": "Required: Defaults to current time"
 								},
 								{
 									"key": "applications",
-									"value": null,
+									"value": "",
 									"description": "Optional",
 									"disabled": true
 								},
 								{
 									"key": "users",
-									"value": null,
+									"value": "",
 									"description": "Optional",
 									"disabled": true
 								},
 								{
 									"key": "event_types",
-									"value": null,
+									"value": "",
 									"description": "Optional",
 									"disabled": true
 								},
 								{
 									"key": "factors",
-									"value": null,
+									"value": "",
 									"description": "Optional",
 									"disabled": true
 								},
 								{
 									"key": "groups",
-									"value": null,
+									"value": "",
 									"description": "Optional",
 									"disabled": true
 								},
 								{
 									"key": "phone_numbers",
-									"value": null,
+									"value": "",
 									"description": "Optional",
 									"disabled": true
 								},
 								{
 									"key": "reasons",
-									"value": null,
+									"value": "",
 									"description": "Optional",
 									"disabled": true
 								},
 								{
 									"key": "results",
-									"value": null,
+									"value": "",
 									"description": "Optional",
 									"disabled": true
 								},
 								{
 									"key": "registration_id",
-									"value": null,
+									"value": "",
 									"description": "Optional",
 									"disabled": true
 								},
 								{
 									"key": "token_id",
-									"value": null,
+									"value": "",
 									"description": "Optional",
 									"disabled": true
 								},
 								{
 									"key": "webauthnkey",
-									"value": null,
+									"value": "",
 									"description": "Optional",
 									"disabled": true
 								}
@@ -5686,280 +6391,282 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					"// Duo API Postman Pre-Request script v3.2.0",
-					"// Last updated 2025-02-21 by: Mark Tripod",
+					"// Duo API Postman Pre-Request script v4.1.0",
+					"// Last updated 2025-04-22 by: Mark Tripod",
 					"",
-					"var URL = require('url');",
-					"var cryptojs = require('crypto-js');",
-					"var btoa = require('btoa');",
+					"var URL = require(\"url\");",
+					"var cryptojs = require(\"crypto-js\");",
+					"",
+					"function getTimestamps() {",
+					"    console.log(\" *** Populating timestamps ***\")",
+					"    const timestampMs = new Date().getTime();",
+					"    pm.variables.set(\"maxtime\", timestampMs);",
+					"    var daysOffset = pm.variables.get(\"timestampDaysOffset\");",
+					"    if (!daysOffset) {",
+					"        daysOffset = 1;",
+					"        console.log(\"'daysOffset' Collection variable not set. Defaulting to 1.\")",
+					"    }",
+					"    const dateOffset = (24*60*60*1000) * daysOffset;",
+					"    pm.variables.set(\"mintime\", timestampMs - dateOffset);",
+					"    console.log(\"mintime (ms): \", timestampMs);",
+					"    console.log(\"maxtime (ms): \", pm.variables.get(\"maxtime\"));",
+					"}",
 					"",
 					"function writeHeader(text) {",
-					"    var breakStr = '============================================================================';",
-					"    var fullWidth = breakStr.length;",
-					"    var padding = (fullWidth - text.length) / 2;",
-					"    var paddingString = ' '.repeat(padding);",
-					"    var msgStr = paddingString + text + paddingString;",
-					"    console.log(breakStr);",
-					"    console.log(msgStr);",
-					"    console.log(breakStr);",
+					"  var breakStr =",
+					"    \"============================================================================\";",
+					"  var fullWidth = breakStr.length;",
+					"  var padding = (fullWidth - text.length) / 2;",
+					"  var paddingString = \" \".repeat(padding);",
+					"  var msgStr = paddingString + text + paddingString;",
+					"  console.log(breakStr);",
+					"  console.log(msgStr);",
+					"  console.log(breakStr);",
 					"}",
 					"",
 					"function replacePathVars() {",
-					"    console.log(' *** Entering replacePathVars() ***');",
-					"    var pathIndex = 0;",
-					"    pm.request.url.path.forEach( function(element) {",
-					"        if (element.includes('{{')) {",
-					"            console.log(`    Variable ${element} found in request URL`);",
-					"            var tmpElement = element.replace('{{', '').replace('}}', '');",
-					"            console.log(`    Looking for value assigned to ${tmpElement}`);",
-					"            var newElement = getVar(tmpElement);",
-					"            pm.request.url.path[pathIndex] = newElement;",
-					"            console.log(`    path element ${pathIndex} is now ${pm.request.url.path[pathIndex]}`);",
-					"        }",
-					"        pathIndex += 1;",
-					"    });",
+					"  console.log(\" *** Entering replacePathVars() ***\");",
+					"  var pathIndex = 0;",
+					"  pm.request.url.path.forEach(function (element) {",
+					"    if (element.includes(\"{{\")) {",
+					"      console.log(`    Variable ${element} found in request URL`);",
+					"      var tmpElement = element.replace(\"{{\", \"\").replace(\"}}\", \"\");",
+					"      console.log(`    Looking for value assigned to ${tmpElement}`);",
+					"      var newElement = getVar(tmpElement);",
+					"      pm.request.url.path[pathIndex] = newElement;",
+					"      console.log(",
+					"        `    path element ${pathIndex} is now ${pm.request.url.path[pathIndex]}`",
+					"      );",
+					"    }",
+					"    pathIndex += 1;",
+					"  });",
 					"}",
 					"",
 					"function replaceQueryVars() {",
-					"    console.log(' *** Entering replaceQueryVars() ***');",
-					"    for(var i = 0; i < pm.request.url.query.count(); i++) {",
-					"        console.log('.  Query string key: ', pm.request.url.query.idx(i).key);",
-					"        if (pm.request.url.query.idx(i).disabled == true) {",
-					"            console.log('.   Skipping disabled query string parameter', pm.request.url.query.idx(i).key);",
-					"            continue;",
-					"        }",
-					"        if (pm.request.url.query.idx(i).key.includes('{{')) {",
-					"            pm.request.url.query.idx(i).key = pm.variables.replaceIn(pm.request.url.query.idx(i).key);",
-					"            console.log('.  New key: ', pm.request.url.query.idx(i).key);",
-					"        }",
-					"        console.log('.  Query string value: ', pm.request.url.query.idx(i).value);",
-					"        if (pm.request.url.query.idx(i).value.includes('{{')) {",
-					"            pm.request.url.query.idx(i).value = pm.variables.replaceIn(pm.request.url.query.idx(i).value);",
-					"            console.log('.  New value: ', pm.request.url.query.idx(i).value);",
-					"        }",
+					"  console.log(\" *** Entering replaceQueryVars() ***\");",
+					"  for (var i = 0; i < pm.request.url.query.count(); i++) {",
+					"    console.log(\".  Query string key: \", pm.request.url.query.idx(i).key);",
+					"    if (pm.request.url.query.idx(i).disabled == true) {",
+					"      console.log(",
+					"        \".   Skipping disabled query string parameter\",",
+					"        pm.request.url.query.idx(i).key",
+					"      );",
+					"      continue;",
 					"    }",
-					"}",
-					"",
-					"function replaceBodyVars() {",
-					"    console.log('  *** Entering replaceBodyVars() ***');",
-					"    pm.request.body.formdata.each.apply(function (bodyElement) {",
-					"        console.log(bodyElement);",
-					"    });",
+					"    if (pm.request.url.query.idx(i).key.includes(\"{{\")) {",
+					"      pm.request.url.query.idx(i).key = pm.variables.replaceIn(",
+					"        pm.request.url.query.idx(i).key",
+					"      );",
+					"      console.log(\".  New key: \", pm.request.url.query.idx(i).key);",
+					"    }",
+					"    console.log(\".  Query string value: \", pm.request.url.query.idx(i).value);",
+					"    if (pm.request.url.query.idx(i).value.includes(\"{{\")) {",
+					"      pm.request.url.query.idx(i).value = pm.variables.replaceIn(",
+					"        pm.request.url.query.idx(i).value",
+					"      );",
+					"      console.log(\".  New value: \", pm.request.url.query.idx(i).value);",
+					"    }",
+					"  }",
 					"}",
 					"",
 					"function getVar(varName) {",
-					"    var tmpVar = pm.variables.get(varName);",
-					"    if (!tmpVar) {",
-					"        console.log(`WARNING: ${varName} variable is missing or invalid.`);",
-					"        throw new Error('Please ensure that the ikey, skey, and apihost entries are defined with proper values in either the Postman Environment or Collection variables.');",
-					"    } else {",
-					"        console.log(`  ===> ${varName} value found.`);",
-					"    }",
-					"    return tmpVar;",
+					"  var tmpVar = pm.variables.get(varName);",
+					"  if (!tmpVar) {",
+					"    console.log(`WARNING: ${varName} variable is missing or invalid.`);",
+					"    throw new Error(",
+					"      \"Please ensure that the ikey, skey, and apihost entries are defined with proper values in either the Postman Environment or Collection variables.\"",
+					"    );",
+					"  } else {",
+					"    console.log(`  ===> ${varName} value found.`);",
+					"  }",
+					"  return tmpVar;",
 					"}",
 					"",
 					"/**",
 					" * @param {pm.request.method} httpMethod - The pm.request.method property",
 					" * @param {pm.request.body} requestBody - The pm.request.body property",
 					" */",
-					"function getAuthHeader(httpMethod, hostname, path, q_str, requestBody, duo_auth_ver) {",
-					"    writeHeader('Calculating Duo Authentication header');",
+					"function getAuthHeader(httpMethod, hostname, path, q_str, requestBody) {",
+					"  writeHeader(\"Calculating Duo Authentication header\");",
 					"",
-					"    console.log('Method: ', httpMethod);",
-					"    console.log('hostname: ', hostname);",
-					"    console.log('Path: ', path);",
-					"    console.log('Query string: ', q_str);",
-					"    console.log('POST body: ', requestBody);",
-					"    console.log('Duo Auth Version: ', duo_auth_ver);",
+					"  console.log(\"Method: \", httpMethod);",
+					"  console.log(\"hostname: \", hostname);",
+					"  console.log(\"Path: \", path);",
+					"  console.log(\"Query string: \", q_str);",
+					"  console.log(\"POST body: \", requestBody);",
 					"",
-					"    writeHeader('Retrieving Required Duo API Information');",
+					"  writeHeader(\"Retrieving Required Duo API Information\");",
 					"",
-					"    var IKEY = getVar('ikey');",
-					"    var SKEY = getVar('skey');",
-					"    var APIHOST = getVar('apihost');",
+					"  var IKEY = getVar(\"ikey\");",
+					"  var SKEY = getVar(\"skey\");",
+					"  var APIHOST = getVar(\"apihost\");",
 					"",
-					"    console.log('   ikey: ', IKEY);",
-					"    console.log('   skey: ************************************');",
-					"    console.log('   apihost: ', APIHOST);",
+					"  console.log(\"   ikey: \", IKEY);",
+					"  console.log(\"   skey: ************************************\");",
+					"  console.log(\"   apihost: \", APIHOST);",
 					"",
-					"    api_call = path;",
-					"    console.log('.   api_call: ', api_call);",
+					"  api_call = path;",
+					"  console.log(\".   api_call: \", api_call);",
 					"",
-					"    var AUTH_TYPE;",
-					"    var hmacDigest;",
-					"    var post_or_put = [\"POST\", \"PUT\"]",
+					"  var AUTH_TYPE;",
+					"  var hmacDigest;",
+					"  var post_or_put = [\"POST\", \"PUT\"];",
 					"",
-					"    writeHeader('Calculating Timestamp Header Value');",
+					"  writeHeader(\"Calculating Timestamp Header Value\");",
 					"",
-					"    //The current time, formatted as RFC 2822. This must be the same string as the \"Date\" header (or X-Duo-Date header).",
-					"    // TODO: explore other options besides the 'moment' module since it is so large and no longer being developed.",
-					"    var moment = require('moment');",
-					"    var timestamp = moment().format(\"ddd, DD MMM YYYY HH:mm:ss ZZ\");",
-					"    pm.variables.set(\"timestampHeader\", timestamp);",
-					"    console.log('timestamp header value: ', timestamp);",
+					"  //The current time, formatted as RFC 2822. This must be the same string as the \"Date\" header (or X-Duo-Date header).",
+					"  // TODO: explore other options besides the 'moment' module since it is so large and no longer being developed.",
+					"  var moment = require(\"moment\");",
+					"  var timestamp = moment().format(\"ddd, DD MMM YYYY HH:mm:ss ZZ\");",
+					"  pm.variables.set(\"timestampHeader\", timestamp);",
+					"  console.log(\"timestamp header value: \", timestamp);",
 					"",
-					"    writeHeader('Calculating Duo Authentication Header Value');",
+					"  writeHeader(\"Calculating Duo Authentication Header Value\");",
 					"",
-					"    switch (duo_auth_ver) {",
-					"        case 'v2':",
-					"            console.log('API request is for a v1 endpoint. Using HMAC-SHA1 based canonical v2 authentication header.');",
-					"            AUTH_TYPE = 'HMAC-SHA1';",
-					"            var body_length = Object.keys(requestBody).length;",
-					"            var params_unsorted = \"\";",
-					"            var params_array = [];",
+					"  console.log(\"Using HMAC-SHA512 based canonical v5 authentication header.\");",
+					"  AUTH_TYPE = \"HMAC-SHA512\";",
+					"  var body_length = Object.keys(requestBody).length;",
+					"  var encoded_params = \"\";",
+					"  var requestData = \"\";",
 					"",
-					"            console.log('requestBody: ', requestBody);",
+					"  console.log(\"Body length: \", body_length);",
 					"",
-					"            //Create unsorted array of parameters from either URL or Body",
-					"            //Assuming POST parameters are in the Body, GET paramters are in URL",
-					"            //(technically it looks like POST can be in the URL as well)",
-					"            if (post_or_put.includes(httpMethod) && requestBody.mode == 'formdata') {",
-					"                console.log('Processing form data for POST request ...');",
-					"                requestBody.formdata.each(function (parameter1) {",
-					"                    if (! parameter1.disabled) {",
-					"                        params_unsorted = parameter1.key + \"=\" + parameter1.value;",
-					"                        params_array.push(params_unsorted);",
-					"                    }",
-					"                });",
-					"            }",
-					"",
-					"            console.log('params_unsorted before split: ', params_unsorted);",
-					"            if (q_str) {",
-					"                console.log('Processing query string parameters ...');",
-					"                params_array = q_str.split(\"&\");",
-					"                console.log('params_array after split: ', params_array);",
-					"            }",
-					"            ",
-					"            console.log('params_array: ', params_array);",
-					"            params_array.sort();                    //lexicographically sort parameters by key",
-					"            var encoded_params = \"\";               ",
-					"            if (params_array[0] !== \"\"){            //check if there are any Params to encode and create the string from",
-					"                var encoded_params_array = params_array.map(urlEncodeParams);   //create URL-encoded array of key=value pairs from the sorted array",
-					"                encoded_params = encoded_params_array.join(\"&\");                //create string of parameters joined by &",
-					"            }",
-					"            console.log('encoded params: ', encoded_params);",
-					"            //Then concatenate these components with (line feed) newlines",
-					"            var requestData =  timestamp+\"\\n\"+httpMethod+\"\\n\"+hostname+\"\\n\"+api_call+\"\\n\"+encoded_params;",
-					"            console.log('requesstData: ', requestData);",
-					"            //compute the HMAC-SHA1 of this canonical representation, using your Duo application's secret key as the HMAC key",
-					"            hmacDigest = cryptojs.HmacSHA1(requestData, SKEY);",
-					"            console.log('hmacDigest: ', hmacDigest);",
-					"            pm.request.headers.add({key: 'Content-Type', value: 'application/x-www-form-urlencoded' });",
-					"            break;",
-					"        case 'v5':",
-					"            console.log('API request is for a v2 endpoint. Using HMAC-SHA512 based canonical v5 authentication header.');",
-					"            AUTH_TYPE = 'HMAC-SHA512';",
-					"            var body_length = Object.keys(requestBody).length;",
-					"            var encoded_params = \"\";  ",
-					"            var requestData = \"\";",
-					"            ",
-					"            console.log('Body length: ', body_length)",
-					"",
-					"            if (post_or_put.includes(httpMethod) && body_length != 0) {  ",
-					"                var jsonData = JSON.parse(pm.request.body.toJSON().raw);",
-					"                jsonData = JSON.stringify(jsonData);",
-					"                encoded_params = jsonData;",
-					"                console.log('encoded_params: ', encoded_params);",
-					"                requestData =  timestamp+\"\\n\"+httpMethod+\"\\n\"+hostname+\"\\n\"+api_call+\"\\n\"+ \"\" +\"\\n\"+cryptojs.SHA512(encoded_params)+\"\\n\"+cryptojs.SHA512(\"\");",
-					"                pm.request.body = jsonData;",
-					"            }",
-					"            else {",
-					"                params_unsorted = q_str;",
-					"                console.log('Unsorted parameters length: ', params_unsorted.length)",
-					"                if (params_unsorted.length > 0) {",
-					"                    params_array = params_unsorted.split(\"&\");",
-					"                    params_array.sort(); ",
-					"                    encoded_params_array = params_array.map(urlEncodeParams);   //create URL-encoded array of key=value pairs from the sorted array",
-					"                    encoded_params = encoded_params_array.join(\"&\");  ",
-					"                }",
-					"                requestData = timestamp+\"\\n\"+httpMethod+\"\\n\"+hostname+\"\\n\"+api_call+\"\\n\"+encoded_params+\"\\n\"+cryptojs.SHA512(\"\")+\"\\n\"+cryptojs.SHA512(\"\");",
-					"            }",
-					"             //compute the HMAC-SHA512 of this canonical representation, using your Duo application's secret key as the HMAC key",
-					"            hmacDigest = cryptojs.HmacSHA512(requestData, SKEY);",
-					"            pm.request.headers.add({key: 'Content-Type', value: 'application/json' });",
-					"            break;",
+					"  if (post_or_put.includes(httpMethod) && body_length != 0) {",
+					"    var jsonData = JSON.parse(pm.request.body.toJSON().raw);",
+					"    jsonData = JSON.stringify(jsonData);",
+					"    encoded_params = jsonData;",
+					"    console.log(\"encoded_params: \", encoded_params);",
+					"    requestData =",
+					"      timestamp +",
+					"      \"\\n\" +",
+					"      httpMethod +",
+					"      \"\\n\" +",
+					"      hostname +",
+					"      \"\\n\" +",
+					"      api_call +",
+					"      \"\\n\" +",
+					"      \"\" +",
+					"      \"\\n\" +",
+					"      cryptojs.SHA512(encoded_params) +",
+					"      \"\\n\" +",
+					"      cryptojs.SHA512(\"\");",
+					"    pm.request.body = jsonData;",
+					"  } else {",
+					"    params_unsorted = q_str;",
+					"    console.log(\"Unsorted parameters length: \", params_unsorted.length);",
+					"    if (params_unsorted.length > 0) {",
+					"      params_array = params_unsorted.split(\"&\");",
+					"      params_array.sort();",
+					"      encoded_params_array = params_array.map(urlEncodeParams); //create URL-encoded array of key=value pairs from the sorted array",
+					"      encoded_params = encoded_params_array.join(\"&\");",
 					"    }",
-					"          ",
-					"    //Use HTTP Basic Authentication for the request, using your integration key as the username and the HMAC signature as the password.",
-					"    var prebase = IKEY+\":\"+ hmacDigest;",
-					"    console.log('prebase: ', prebase);",
-					"     ",
-					"    //encodes a string in base-64",
-					"    var baseComplete = btoa(prebase);",
-					"    console.log('baseComplete: ', baseComplete);",
-					" ",
-					"    var authHeader = \"Basic \"+ baseComplete;",
-					"    console.log('hmacauthheader: ', authHeader);",
-					"    return authHeader;",
+					"    requestData =",
+					"      timestamp +",
+					"      \"\\n\" +",
+					"      httpMethod +",
+					"      \"\\n\" +",
+					"      hostname +",
+					"      \"\\n\" +",
+					"      api_call +",
+					"      \"\\n\" +",
+					"      encoded_params +",
+					"      \"\\n\" +",
+					"      cryptojs.SHA512(\"\") +",
+					"      \"\\n\" +",
+					"      cryptojs.SHA512(\"\");",
+					"  }",
+					"  //compute the HMAC-SHA512 of this canonical representation, using your Duo application's secret key as the HMAC key",
+					"  hmacDigest = cryptojs.HmacSHA512(requestData, SKEY);",
+					"  pm.request.headers.add({ key: \"Content-Type\", value: \"application/json\" });",
+					"",
+					"  //Use HTTP Basic Authentication for the request, using your integration key as the username and the HMAC signature as the password.",
+					"  var prebase = IKEY + \":\" + hmacDigest;",
+					"  console.log(\"prebase: \", prebase);",
+					"",
+					"  //encodes a string in base-64",
+					"  var baseComplete = btoa(prebase);",
+					"  console.log(\"baseComplete: \", baseComplete);",
+					"",
+					"  var authHeader = \"Basic \" + baseComplete;",
+					"  console.log(\"hmacauthheader: \", authHeader);",
+					"  return authHeader;",
 					"}",
 					"",
-					" ",
 					"function urlEncodeParams(value, index, array) {",
-					"    //split the Key and Value at the first \"=\", URL-encode the Value, and rejoin them with an \"=\"",
-					"    //If the separator in the split() is a regular expression that contains capturing parentheses (), matched results are included in the array",
-					"    return value.split(/=(.+)/)[0] + \"=\" + encodeURIComponent(value.split(/=(.+)/)[1]);",
+					"  //split the Key and Value at the first \"=\", URL-encode the Value, and rejoin them with an \"=\"",
+					"  //If the separator in the split() is a regular expression that contains capturing parentheses (), matched results are included in the array",
+					"  return (",
+					"    value.split(/=(.+)/)[0] + \"=\" + encodeURIComponent(value.split(/=(.+)/)[1])",
+					"  );",
 					"}",
 					"",
 					"// Begin script execution",
-					"writeHeader('Begin Creation of Duo API Authentication Headers');",
+					"writeHeader(\"Begin Creation of Duo API Authentication Headers\");",
 					"",
-					"console.log('PM request object: ', pm.request);",
-					"console.log('PM request host: ', pm.request.url.host);",
-					"console.log('Request data: ', pm.request.data);",
+					"console.log(\"PM request object: \", pm.request);",
+					"console.log(\"PM request host: \", pm.request.url.host);",
+					"console.log(\"Request data: \", pm.request.data);",
 					"",
-					"var duo_auth_ver;",
 					"let req_url = pm.request.url.getPath();",
-					"console.log('Request URL: ', req_url);",
+					"console.log(\"Request URL: \", req_url);",
+					"",
+					"getTimestamps();",
 					"",
 					"if (pm.request.url.query && pm.request.url.query.count() > 0) {",
-					"    console.log('Request has a query string defined. Checking for any variable definitions...');",
-					"    replaceQueryVars();",
+					"  console.log(",
+					"    \"Request has a query string defined. Checking for any variable definitions...\"",
+					"  );",
+					"  replaceQueryVars();",
 					"} else {",
-					"    console.log('Request has no query string.');",
+					"  console.log(\"Request has no query string.\");",
 					"}",
 					"",
 					"var q_str = pm.request.url.getQueryString();",
-					"console.log('PM parsed query string: ', q_str);",
+					"console.log(\"PM parsed query string: \", q_str);",
 					"var pmQueryStringElements = pm.request.url.query.toObject();",
-					"console.log('PM query string object: ', pmQueryStringElements);",
+					"console.log(\"PM query string object: \", pmQueryStringElements);",
 					"",
-					"console.log('Query string: ', q_str);",
+					"console.log(\"Query string: \", q_str);",
 					"if (!q_str) {",
-					"    q_str = \"\";",
+					"  q_str = \"\";",
 					"}",
-					"console.log('q_str length: ', q_str.length);",
+					"console.log(\"q_str length: \", q_str.length);",
 					"var path = pm.request.url.path;",
-					"console.log('postman request path object: ', path);",
-					"console.log('Replacing any variables that may be in the path.')",
+					"console.log(\"postman request path object: \", path);",
+					"console.log(\"Replacing any variables that may be in the path.\");",
 					"replacePathVars();",
-					"path = path.join('/');",
-					"path = '/' + path;",
-					"console.log('Path string: ', path.toString());",
+					"path = path.join(\"/\");",
+					"path = \"/\" + path;",
+					"console.log(\"Path string: \", path.toString());",
 					"",
-					"if (req_url.includes('/v1/') || req_url.includes('/auth/v2/')) {",
-					"    duo_auth_ver = 'v2'; ",
-					"} else {",
-					"    duo_auth_ver = 'v5'; ",
+					"if (pm.request.url.host[0] == \"{{apihost}}\") {",
+					"  console.log(",
+					"    \"Request URL contains {{apihost}} variable. Checking if that value is defined in the Postman Environment.\"",
+					"  );",
+					"  var hostname = getVar(\"apihost\");",
+					"  pm.request.url.host[0] = hostname;",
 					"}",
 					"",
-					"// Override the Duo Authorization version for newer bulk action and v3 endpoints",
-					"if (req_url.includes('bulk') || req_url.includes('/skey') || req_url.includes('/v3/')) {",
-					"    duo_auth_ver = 'v5';",
-					"}",
+					"pm.variables.set(",
+					"  \"hmacAuthHeader\",",
+					"  getAuthHeader(",
+					"    pm.request.method,",
+					"    pm.request.url.host[0],",
+					"    path,",
+					"    q_str,",
+					"    pm.request.body",
+					"  )",
+					");",
 					"",
-					"",
-					"console.log('Duo Canonical Authentication Version:', duo_auth_ver);",
-					"",
-					"if (pm.request.url.host[0] == '{{apihost}}') {",
-					"    console.log('Request URL contains {{apihost}} variable. Checking if that value is defined in the Postman Environment.');",
-					"    var hostname = getVar('apihost');",
-					"    pm.request.url.host[0] = hostname;",
-					"}",
-					"",
-					"pm.variables.set(\"hmacAuthHeader\", getAuthHeader(pm.request.method, pm.request.url.host[0], path, q_str, pm.request.body, duo_auth_ver));",
-					"",
-					"pm.request.headers.add({key: 'Date', value: pm.variables.get(\"timestampHeader\")});",
-					"pm.request.headers.add({key: 'Authorization', value: pm.variables.get(\"hmacAuthHeader\")});"
+					"pm.request.headers.add({",
+					"  key: \"Date\",",
+					"  value: pm.variables.get(\"timestampHeader\"),",
+					"});",
+					"pm.request.headers.add({",
+					"  key: \"Authorization\",",
+					"  value: pm.variables.get(\"hmacAuthHeader\"),",
+					"});",
+					""
 				]
 			}
 		},
@@ -5968,23 +6675,7 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					"// Duo API Postman Tests script v1.0.0",
-					"// Last updated 2023-09-08 by: Mark Tripod",
 					"",
-					"pm.globals.set('loadUtils', function loadUtils() {",
-					"    let utils = {};",
-					"    utils.writeHeader = function writeHeader(text) {",
-					"        var breakStr = '============================================================================';",
-					"        var fullWidth = breakStr.length;",
-					"        var padding = (fullWidth - text.length) / 2;",
-					"        var paddingString = ' '.repeat(padding);",
-					"        var msgStr = paddingString + text + paddingString;",
-					"        console.log(breakStr);",
-					"        console.log(msgStr);",
-					"        console.log(breakStr);",
-					"    }",
-					"    return utils;",
-					"} + '; loadUtils();');",
 					""
 				]
 			}
@@ -6040,6 +6731,11 @@
 			"key": "user_id",
 			"value": "",
 			"type": "default"
+		},
+		{
+			"key": "timestampDaysOffset",
+			"value": "",
+			"type": "string"
 		}
 	]
 }
