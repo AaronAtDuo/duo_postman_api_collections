@@ -60,24 +60,24 @@ The essential steps for using the OpenID Connect Debugger tools are:
 
 11. Paste the **Authorization code** into the **Request Access Token** request within the Postman Duo Generic OIDC Integration Collection.
 
-    > [!TIP]
-    > How to enter auth code in Postman
-    > The {{oidc_auth_code}} Postman variable is local to the request. If you hover the mouse cursor over the variable identifier in Value column, a popup input box will appear.
+> [!TIP]
+> How to enter auth code in Postman
+> The {{oidc_auth_code}} Postman variable is local to the request. If you hover the mouse cursor over the variable identifier in Value column, a popup input box will appear.
 
     ![Screenshot of OIDC auth code variable definition](/assets/images/duo-generic-oidc-integrations/oidc_auth_code_variable.png)
 
 12. Send the request.
 13. Open the **Request New Token Using Refresh Token** request in Postman and **Send** it.
 
-    > [!NOTE]
-    > Variable values are automatically updated 
-    > There is no need to change any of the variable values in the request. A successful response from the Request Access Token request will automatically extract the necessary values from the response and update the appropriate variables.
+> [!NOTE]
+> Variable values are automatically updated 
+> There is no need to change any of the variable values in the request. A successful response from the Request Access Token request will automatically extract the necessary values from the response and update the appropriate variables.
 
 14. Open the **Refresh Token Inspection** request in Postman and **Send** it.
 
-    > [!TIP]
-    > Additional Troubleshooting Option 
-    > A normal Access Token value can also be placed in the token value of the Refresh Token Inspection request as well.
+> [!TIP]
+> Additional Troubleshooting Option 
+> A normal Access Token value can also be placed in the token value of the Refresh Token Inspection request as well.
     
 ---
 
