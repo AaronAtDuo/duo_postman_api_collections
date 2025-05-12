@@ -111,4 +111,4 @@ For more troubleshooting, check
 ---
 
 ## License
-This project is open-source and follows the **GNU General Public License v3.0**.
+This project is open-source and follows the **MIT License**.
