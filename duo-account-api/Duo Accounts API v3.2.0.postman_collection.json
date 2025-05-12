@@ -89,13 +89,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://{{apihost}}/accounts/v1/billing/edition?account_id={{account_id}}",
+					"raw": "https://{{apihost}}/admin/v1/billing/edition?account_id={{account_id}}",
 					"protocol": "https",
 					"host": [
 						"{{apihost}}"
 					],
 					"path": [
-						"accounts",
+						"admin",
 						"v1",
 						"billing",
 						"edition"
@@ -117,13 +117,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "https://{{apihost}}/accounts/v1/billing/edition?account_id={{account_id}}&edition={{edition}}",
+					"raw": "https://{{apihost}}/admin/v1/billing/edition?account_id={{account_id}}&edition={{edition}}",
 					"protocol": "https",
 					"host": [
 						"{{apihost}}"
 					],
 					"path": [
-						"accounts",
+						"admin",
 						"v1",
 						"billing",
 						"edition"
@@ -150,13 +150,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://{{apihost}}/accounts/v1/billing/telephony?account_id={{account_id}}",
+					"raw": "https://{{apihost}}/admin/v1/billing/telephony?account_id={{account_id}}",
 					"protocol": "https",
 					"host": [
 						"{{apihost}}"
 					],
 					"path": [
-						"accounts",
+						"admin",
 						"v1",
 						"billing",
 						"telephony"
@@ -178,13 +178,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "https://{{apihost}}/accounts/v1/billing/edition?account_id={{account_id}}&credits={{edition}}",
+					"raw": "https://{{apihost}}/admin/v1/billing/edition?account_id={{account_id}}&credits={{edition}}",
 					"protocol": "https",
 					"host": [
 						"{{apihost}}"
 					],
 					"path": [
-						"accounts",
+						"admin",
 						"v1",
 						"billing",
 						"edition"
