@@ -21,7 +21,7 @@ the authentication headers regenerated upon each new request, this works REALLY 
 
 [<img src="/assets/images/duo-admin-api/image.png">](/assets/images/duo-admin-api/image.png)
 
-2. Add your specific ikey, skey, apihost as Variables and add your Admin/Auth API integration keys in as the current values.
+2. Add your specific ikey, skey, apihost as Variables and add your Admin API integration keys in as the current values.
 
 ![alt text](../assets/images/duo-admin-api/image-1.png)
 

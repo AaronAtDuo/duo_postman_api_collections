@@ -93,7 +93,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https:///auth/v2/check",
+									"raw": "https://{{apihost}}/auth/v2/check",
 									"protocol": "https",
 									"path": [
 										"auth",
@@ -348,7 +348,7 @@
 									]
 								},
 								"url": {
-									"raw": "https:///auth/v2/enroll",
+									"raw": "https://{{apihost}}/auth/v2/enroll",
 									"protocol": "https",
 									"path": [
 										"auth",
@@ -449,7 +449,7 @@
 									"formdata": []
 								},
 								"url": {
-									"raw": "https:///auth/v2/enroll_status?activation_code=&user_id=",
+									"raw": "https://{{apihost}}/auth/v2/enroll_status?activation_code=&user_id=",
 									"protocol": "https",
 									"path": [
 										"auth",
@@ -908,7 +908,7 @@
 									]
 								},
 								"url": {
-									"raw": "https:///auth/v2/auth",
+									"raw": "https://{{apihost}}/auth/v2/auth",
 									"protocol": "https",
 									"path": [
 										"auth",
@@ -1923,7 +1923,7 @@
 									]
 								},
 								"url": {
-									"raw": "https:///auth/v2/preauth",
+									"raw": "https://{{apihost}}/auth/v2/preauth",
 									"protocol": "https",
 									"path": [
 										"auth",
@@ -2113,7 +2113,7 @@
 									]
 								},
 								"url": {
-									"raw": "https:///auth/v2/auth",
+									"raw": "https://{{apihost}}/auth/v2/auth",
 									"protocol": "https",
 									"path": [
 										"auth",
@@ -2200,7 +2200,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https:///auth/v2/auth_status?txid=",
+									"raw": "https://{{apihost}}/auth/v2/auth_status?txid=",
 									"protocol": "https",
 									"path": [
 										"auth",
