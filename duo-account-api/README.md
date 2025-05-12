@@ -3,8 +3,8 @@
 
 The Duo Account API provides programmatic access to the administrative functionality of Duo Security's two-factor authentication platform.
 
-The Account API lets developers integrate with Duo Security's platform at a low level. The API has methods for creating, retrieving, updating, and deleting the core objects in Duo's system: users, phones, hardware tokens, admins, and integrations.
-Developers can write applications that programmatically read their Duo account's authentication logs, administrator logs, and telephony logs; read or update account settings; and retrieve reports and other information.
+The Account API lets developers integrate with Duo Security's platform at a low level. The API has methods for creating, retrieving, and deleting Duo accounts.
+Developers can write applications that programmatically read their Duo account's identifiers, create new subaccounts, or delete accounts.
 Review the API Details to see how to construct your first API request.
 
 ## Postman Configuration using Pre-built Templates
